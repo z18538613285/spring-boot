@@ -53,9 +53,11 @@ public abstract class ExecutableArchiveLauncher extends Launcher {
 
 	@Override
 	protected String getMainClass() throws Exception {
+		// 获得启动的类的全名
 		Manifest manifest = this.archive.getManifest();
 		String mainClass = null;
 		if (manifest != null) {
+			//从 jar 包的 MANIFEST.MF 文件的 Start-Class 配置项，，获得我们设置的 Spring Boot 的主启动类。
 			mainClass = manifest.getMainAttributes().getValue("Start-Class");
 		}
 		if (mainClass == null) {
@@ -66,7 +68,10 @@ public abstract class ExecutableArchiveLauncher extends Launcher {
 
 	@Override
 	protected List<Archive> getClassPathArchives() throws Exception {
+		// <1> 获得所有 Archive（暂时理解成一个一个的档案）
+		//那么，我们在 ExecutableArchiveLauncher 的 archive 属性是怎么来的呢？答案在 ExecutableArchiveLauncher 的构造方法中，
 		List<Archive> archives = new ArrayList<>(this.archive.getNestedArchives(this::isNestedArchive));
+		// <2> 后续处理
 		postProcessClassPathArchives(archives);
 		return archives;
 	}

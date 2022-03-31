@@ -40,11 +40,20 @@ public class JarLauncher extends ExecutableArchiveLauncher {
 		super(archive);
 	}
 
+	/**
+	 * 创建了 EntryFilter 匿名实现类，用于过滤 jar 包不需要的目录。
+	 * @param entry the jar entry
+	 * @return
+	 *
+	 * @tips 目的就是过滤获得，BOOT-INF/classes/ 目录下的类，以及 BOOT-INF/lib/ 的内嵌 jar 包。
+	 */
 	@Override
 	protected boolean isNestedArchive(Archive.Entry entry) {
+		// 如果是目录的情况，只要 BOOT-INF/classes/ 目录
 		if (entry.isDirectory()) {
 			return entry.getName().equals(BOOT_INF_CLASSES);
 		}
+		// 如果是文件的情况，只要 BOOT-INF/lib/ 目录下的 `jar` 包
 		return entry.getName().startsWith(BOOT_INF_LIB);
 	}
 

@@ -30,6 +30,10 @@ import org.springframework.boot.loader.Launcher;
  * @author Phillip Webb
  * @since 1.0.0
  * @see JarFileArchive
+ *
+ * @tips Archive 接口，是 spring-boot-loader 项目定义的档案抽象，
+ * ExplodedArchive 是针对目录的 Archive 实现类。
+ * JarFileArchive 是针对 jar 包的 Archive 实现类。
  */
 public interface Archive extends Iterable<Archive.Entry> {
 
@@ -52,6 +56,8 @@ public interface Archive extends Iterable<Archive.Entry> {
 	 * @param filter the filter used to limit entries
 	 * @return nested archives
 	 * @throws IOException if nested archives cannot be read
+	 *
+	 * @tips 调用 Archive 的 #getNestedArchives(EntryFilter filter) 方法，获得 archive 内嵌的 Archive 集合。
 	 */
 	List<Archive> getNestedArchives(EntryFilter filter) throws IOException;
 

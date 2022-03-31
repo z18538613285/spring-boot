@@ -25,6 +25,8 @@ import java.lang.reflect.Method;
  * @author Phillip Webb
  * @author Andy Wilkinson
  * @since 1.0.0
+ *
+ * @tips 负责 Spring Boot 应用的启动。
  */
 public class MainMethodRunner {
 
@@ -43,7 +45,10 @@ public class MainMethodRunner {
 	}
 
 	public void run() throws Exception {
+		// <1> 加载 Spring Boot，通过 LaunchedURLClassLoader 类加载器，加载到我们设置的 Spring Boot 的主启动类。
 		Class<?> mainClass = Thread.currentThread().getContextClassLoader().loadClass(this.mainClassName);
+		// <2> 反射调用 main 方法，通过反射调用主启动类的 #main(String[] args) 方法，启动 Spring Boot 应用。
+		// 这里也告诉了我们答案，为什么我们通过编写一个带有 #main(String[] args) 方法的类，就能够启动 Spring Boot 应用。
 		Method mainMethod = mainClass.getDeclaredMethod("main", String[].class);
 		mainMethod.invoke(null, new Object[] { this.args });
 	}

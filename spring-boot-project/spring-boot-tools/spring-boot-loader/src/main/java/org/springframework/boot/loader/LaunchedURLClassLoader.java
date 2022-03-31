@@ -35,6 +35,8 @@ import org.springframework.boot.loader.jar.Handler;
  * @author Dave Syer
  * @author Andy Wilkinson
  * @since 1.0.0
+ *
+ * @tips 是 spring-boot-loader 项目自定义的类加载器，实现对 jar 包中 META-INF/classes 目录下的类和 META-INF/lib 内嵌的 jar 包中的类的加载。
  */
 public class LaunchedURLClassLoader extends URLClassLoader {
 
@@ -46,6 +48,9 @@ public class LaunchedURLClassLoader extends URLClassLoader {
 	 * Create a new {@link LaunchedURLClassLoader} instance.
 	 * @param urls the URLs from which to load classes and resources
 	 * @param parent the parent class loader for delegation
+	 *
+	 * @tips 第一个参数 urls，使用的是 Archive 集合对应的 URL 地址们，从而告诉 LaunchedURLClassLoader 读取 jar 的地址。
+	 * 	第二个参数 parent，设置 LaunchedURLClassLoader 的父加载器。这里后续胖友可以理解下，类加载器的双亲委派模型，这里就拓展开了。
 	 */
 	public LaunchedURLClassLoader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
@@ -73,11 +78,21 @@ public class LaunchedURLClassLoader extends URLClassLoader {
 		}
 	}
 
+	/**
+	 * LaunchedURLClassLoader 的实现代码并不多，我们主要来看看它是如何从 jar 包中加载类的。
+	 * @param name
+	 * @param resolve
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
 	@Override
 	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 		Handler.setUseFastConnectionExceptions(true);
 		try {
 			try {
+				// 定义包所在路径
+				//<1> 处，在通过父类的 #getPackage(String name) 方法获取不到指定类所在的包时，会通过遍历 urls 数组，从 jar 包中加载类所在的包。
+				// 当找到包时，会调用 #definePackage(String name, Manifest man, URL url) 方法，设置包所在的 Archive 对应的 url。
 				definePackageIfNecessary(name);
 			}
 			catch (IllegalArgumentException ex) {
@@ -90,6 +105,7 @@ public class LaunchedURLClassLoader extends URLClassLoader {
 							"Package " + name + " has already been " + "defined but it could not be found");
 				}
 			}
+			// 加载类 调用父类的 #loadClass(String name, boolean resolve) 方法，加载对应的类。
 			return super.loadClass(name, resolve);
 		}
 		finally {
@@ -106,6 +122,7 @@ public class LaunchedURLClassLoader extends URLClassLoader {
 	private void definePackageIfNecessary(String className) {
 		int lastDot = className.lastIndexOf('.');
 		if (lastDot >= 0) {
+			// 获取类所在的报名
 			String packageName = className.substring(0, lastDot);
 			if (getPackage(packageName) == null) {
 				try {
@@ -128,6 +145,7 @@ public class LaunchedURLClassLoader extends URLClassLoader {
 	private void definePackage(String className, String packageName) {
 		try {
 			AccessController.doPrivileged((PrivilegedExceptionAction<Object>) () -> {
+				// 把类名解析成路径并加上 .class 后缀
 				String packageEntryName = packageName.replace('.', '/') + "/";
 				String classEntryName = className.replace('.', '/') + ".class";
 				for (URL url : getURLs()) {

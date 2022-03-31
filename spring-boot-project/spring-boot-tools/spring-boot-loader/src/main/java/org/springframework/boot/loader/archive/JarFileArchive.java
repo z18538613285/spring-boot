@@ -83,7 +83,9 @@ public class JarFileArchive implements Archive {
 	public List<Archive> getNestedArchives(EntryFilter filter) throws IOException {
 		List<Archive> nestedArchives = new ArrayList<>();
 		for (Entry entry : this) {
+			// 过滤匹配
 			if (filter.matches(entry)) {
+				// 创建 JarFileArchive 对象
 				nestedArchives.add(getNestedArchive(entry));
 			}
 		}

@@ -46,6 +46,8 @@ import org.springframework.boot.loader.data.RandomAccessDataFile;
  * @author Phillip Webb
  * @author Andy Wilkinson
  * @since 1.0.0
+ *
+ * @tips JarFile 是 java.util.jar.JarFile 的子类，JarFile 主要增强支持对内嵌的 jar 包的获取。
  */
 public class JarFile extends java.util.jar.JarFile {
 
@@ -410,11 +412,17 @@ public class JarFile extends java.util.jar.JarFile {
 	/**
 	 * Register a {@literal 'java.protocol.handler.pkgs'} property so that a
 	 * {@link URLStreamHandler} will be located to deal with jar URLs.
+	 *
+	 * @tips 目的很明确，通过将 org.springframework.boot.loader 包设置到 "java.protocol.handler.pkgs" 环境变量，
+	 * 从而使用到自定义的 URLStreamHandler 实现类 Handler，处理 jar: 协议的 URL。
 	 */
 	public static void registerUrlProtocolHandler() {
+		// 获得 URLStreamHandler 的路径
 		String handlers = System.getProperty(PROTOCOL_HANDLER, "");
+		// 将 Spring Boot 自定义的 HANDLERS_PACKAGE(org.springframework.boot.loader) 补充上去
 		System.setProperty(PROTOCOL_HANDLER,
 				("".equals(handlers) ? HANDLERS_PACKAGE : handlers + "|" + HANDLERS_PACKAGE));
+		// 重置已缓存的 URLStreamHandler 处理器们
 		resetCachedUrlHandlers();
 	}
 
@@ -422,6 +430,9 @@ public class JarFile extends java.util.jar.JarFile {
 	 * Reset any cached handlers just in case a jar protocol has already been used. We
 	 * reset the handler by trying to set a null {@link URLStreamHandlerFactory} which
 	 * should have no effect other than clearing the handlers cache.
+	 *
+	 * @tips 重置 URL 中的 URLStreamHandler 的缓存，防止 `jar://` 协议对应的 URLStreamHandler 已经创建
+	 *  	我们通过设置 URLStreamHandlerFactory 为 null 的方式，清空 URL 中的该缓存。
 	 */
 	private static void resetCachedUrlHandlers() {
 		try {

@@ -107,8 +107,8 @@
 			<modules>
 				<module>spring-boot-project</module>
 				<!-- Samples are built via the invoker plugin -->
-				<module>spring-boot-samples-invoker</module>
-				<module>spring-boot-tests</module>
+<!--				<module>spring-boot-samples-invoker</module>-->
+<!--				<module>spring-boot-tests</module>-->
 			</modules>
 		</profile>
 		<!-- M2E profile to allow easy import into Eclipse -->
