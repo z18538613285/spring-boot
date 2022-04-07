@@ -10,8 +10,10 @@
 	<name>Spring Boot Build</name>
 	<description>Spring Boot Build</description>
 	<properties>
-		<revision>2.1.19.BUILD-SNAPSHOT</revision>
+<!--		<revision>2.1.19.BUILD-SNAPSHOT</revision>-->
+		<revision>2.1.6.RELEASE</revision>
 		<main.basedir>${basedir}</main.basedir>
+		<disable.checks>true</disable.checks>
 	</properties>
 	<!-- Most elements are in profiles so they are stripped out during maven-flatten -->
 	<profiles>
@@ -217,37 +219,37 @@
 			<plugins>
 				<!-- This plugin's configuration is used to store Eclipse m2e settings
 					 only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.jetbrains.kotlin
-										</groupId>
-										<artifactId>
-											kotlin-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.1.51,)
-										</versionRange>
-										<goals>
-											<goal>compile</goal>
-											<goal>test-compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
+<!--				<plugin>-->
+<!--					<groupId>org.eclipse.m2e</groupId>-->
+<!--					<artifactId>lifecycle-mapping</artifactId>-->
+<!--					<version>1.0.0</version>-->
+<!--					<configuration>-->
+<!--						<lifecycleMappingMetadata>-->
+<!--							<pluginExecutions>-->
+<!--								<pluginExecution>-->
+<!--									<pluginExecutionFilter>-->
+<!--										<groupId>-->
+<!--											org.jetbrains.kotlin-->
+<!--										</groupId>-->
+<!--										<artifactId>-->
+<!--											kotlin-maven-plugin-->
+<!--										</artifactId>-->
+<!--										<versionRange>-->
+<!--											[1.1.51,)-->
+<!--										</versionRange>-->
+<!--										<goals>-->
+<!--											<goal>compile</goal>-->
+<!--											<goal>test-compile</goal>-->
+<!--										</goals>-->
+<!--									</pluginExecutionFilter>-->
+<!--									<action>-->
+<!--										<ignore></ignore>-->
+<!--									</action>-->
+<!--								</pluginExecution>-->
+<!--							</pluginExecutions>-->
+<!--						</lifecycleMappingMetadata>-->
+<!--					</configuration>-->
+<!--				</plugin>-->
 				<plugin>
 					<groupId>com.gradle</groupId>
 					<artifactId>gradle-enterprise-maven-extension</artifactId>

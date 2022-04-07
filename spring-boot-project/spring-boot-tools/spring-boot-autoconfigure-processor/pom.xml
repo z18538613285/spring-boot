@@ -12,6 +12,9 @@
 	<description>Spring Auto-Configure Annotation Processor</description>
 	<properties>
 		<main.basedir>${basedir}/../../..</main.basedir>
+		<file.encoding>UTF-8</file.encoding>
+		<java.source.version>1.8</java.source.version>
+		<java.target.version>1.8</java.target.version>
 	</properties>
 	<scm>
 		<url>${git.url}</url>
@@ -34,6 +37,8 @@
 				<configuration>
 					<!-- Ensure own annotation processor doesn't kick in -->
 					<proc>none</proc>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>

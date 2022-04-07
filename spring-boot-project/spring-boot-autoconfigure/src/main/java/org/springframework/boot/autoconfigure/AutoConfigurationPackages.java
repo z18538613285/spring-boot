@@ -46,6 +46,10 @@ import org.springframework.util.StringUtils;
  * @author Dave Syer
  * @author Oliver Gierke
  * @since 1.0.0
+ *
+ * @tips 自动配置所在的包名。
+ * 简单来说，就是将使用 @AutoConfigurationPackage 注解的类所在的包（package），注册成一个 Spring IoC 容器中的 Bean 。
+ * 后续有其它模块需要使用，就可以通过获得该 Bean ，从而获得所在的包。例如说，JPA 模块，需要使用到。
  */
 public abstract class AutoConfigurationPackages {
 
@@ -88,13 +92,17 @@ public abstract class AutoConfigurationPackages {
 	 * configuration class or classes.
 	 * @param registry the bean definition registry
 	 * @param packageNames the package names to set
+	 * @tips 注册一个用于存储报名（package）的 Bean 到 Spring IoC 容器中。
+	 * 注册的 BEAN 的类型，为 BasePackages 类型。它是 AutoConfigurationPackages 的内部类。
 	 */
 	public static void register(BeanDefinitionRegistry registry, String... packageNames) {
+		// <1> 如果已经存在该 BEAN ，则修改其包（package）属性
 		if (registry.containsBeanDefinition(BEAN)) {
 			BeanDefinition beanDefinition = registry.getBeanDefinition(BEAN);
 			ConstructorArgumentValues constructorArguments = beanDefinition.getConstructorArgumentValues();
 			constructorArguments.addIndexedArgumentValue(0, addBasePackages(constructorArguments, packageNames));
 		}
+		// <2> 如果不存在该 BEAN ，则创建一个 Bean ，并进行注册
 		else {
 			GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
 			beanDefinition.setBeanClass(BasePackages.class);
@@ -105,7 +113,9 @@ public abstract class AutoConfigurationPackages {
 	}
 
 	private static String[] addBasePackages(ConstructorArgumentValues constructorArguments, String[] packageNames) {
+		// 获得已存在的
 		String[] existing = (String[]) constructorArguments.getIndexedArgumentValue(0, String[].class).getValue();
+		// 进行合并
 		Set<String> merged = new LinkedHashSet<>();
 		merged.addAll(Arrays.asList(existing));
 		merged.addAll(Arrays.asList(packageNames));
@@ -115,6 +125,9 @@ public abstract class AutoConfigurationPackages {
 	/**
 	 * {@link ImportBeanDefinitionRegistrar} to store the base package from the importing
 	 * configuration.
+	 *
+	 * @tips Registrar ，是 AutoConfigurationPackages 的内部类，实现 ImportBeanDefinitionRegistrar、DeterminableImports 接口，注册器，
+	 * 用于处理 @AutoConfigurationPackage 注解。
 	 */
 	static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports {
 
@@ -132,6 +145,7 @@ public abstract class AutoConfigurationPackages {
 
 	/**
 	 * Wrapper for a package import.
+	 * @tips PackageImport 是 AutoConfigurationPackages 的内部类，用于获得包名。
 	 */
 	private static final class PackageImport {
 
@@ -167,6 +181,8 @@ public abstract class AutoConfigurationPackages {
 
 	/**
 	 * Holder for the base package (name may be null to indicate no scanning).
+	 *
+	 * @tips 就是一个有 packages 属性的封装类。
 	 */
 	static final class BasePackages {
 

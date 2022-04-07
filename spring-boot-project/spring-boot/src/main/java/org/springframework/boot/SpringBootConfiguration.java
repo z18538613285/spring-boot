@@ -36,6 +36,9 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Phillip Webb
  * @since 1.4.0
+ *
+ * @tips 可以看到，上面自继承的@Configuration方法，所以它的功能也一致，可以将当前类内声明的一个或多个以@Bean注释标注的方法的实例解析到 Srping 容器中，
+ * 并且实例名就是名称。
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

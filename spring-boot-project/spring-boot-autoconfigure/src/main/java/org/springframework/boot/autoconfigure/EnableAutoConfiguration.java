@@ -72,12 +72,18 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
  * @see ConditionalOnClass
  * @see AutoConfigureAfter
  * @see SpringBootApplication
+ *
+ * @tips 用于开启自动配置功能，是spring-boot-autoconfigure项目最核心的注解。
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
 @AutoConfigurationPackage
+/**
+ * 可用于资源的导入。情况比较多，
+ * AutoConfigurationImportSelector ，导入自动配置相关的资源。
+ */
 @Import(AutoConfigurationImportSelector.class)
 public @interface EnableAutoConfiguration {
 
@@ -86,6 +92,8 @@ public @interface EnableAutoConfiguration {
 	/**
 	 * Exclude specific auto-configuration classes such that they will never be applied.
 	 * @return the classes to exclude
+	 *
+	 * @tips  排除特定的自动配置类，使其永远不会被应用。
 	 */
 	Class<?>[] exclude() default {};
 
@@ -94,6 +102,8 @@ public @interface EnableAutoConfiguration {
 	 * applied.
 	 * @return the class names to exclude
 	 * @since 1.3.0
+	 *
+	 * @tips 排除特定的自动配置类名称，以便它们永远不会被应用。
 	 */
 	String[] excludeName() default {};
 
