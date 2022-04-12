@@ -23,6 +23,8 @@ import org.springframework.context.ApplicationContext;
  *
  * @author Stephane Nicoll
  * @since 2.0.0
+ *
+ * @tips 继承 ApplicationContext 接口，Reactive Web ApplicationContext 接口。
  */
 public interface ReactiveWebApplicationContext extends ApplicationContext {
 

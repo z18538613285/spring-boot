@@ -26,6 +26,8 @@ import org.springframework.util.ObjectUtils;
  *
  * @author Phillip Webb
  * @since 2.0.0
+ *
+ * @tips 重点是，可以获得 WebServer 的方法。😈 因为获得它，可以做各种 WebServer 的管理。
  */
 public interface WebServerApplicationContext extends ApplicationContext {
 

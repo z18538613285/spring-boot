@@ -25,6 +25,11 @@ import org.springframework.context.ConfigurableApplicationContext;
  *
  * @author Phillip Webb
  * @since 2.0.0
+ *
+ * @tips 实现它后，可以获得管理 WebServer 的能力。
+ * org.springframework.context.ConfigurableApplicationContext ，是 Spring Framework 提供的类，就不细看了。
+ * org.springframework.boot.web.context.WebServerApplicationContext ，继承 ApplicationContext 接口，WebServer ApplicationContext 接口。
+ *
  */
 public interface ConfigurableWebServerApplicationContext
 		extends ConfigurableApplicationContext, WebServerApplicationContext {

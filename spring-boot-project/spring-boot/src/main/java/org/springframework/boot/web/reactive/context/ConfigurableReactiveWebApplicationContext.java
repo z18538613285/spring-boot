@@ -23,6 +23,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  *
  * @author Stephane Nicoll
  * @since 2.0.0
+ * @tips 继承 ConfigurableApplicationContext、「2. ReactiveWebApplicationContext」 接口，可配置的 ReactiveWebApplicationContext 接口。
  */
 public interface ConfigurableReactiveWebApplicationContext
 		extends ConfigurableApplicationContext, ReactiveWebApplicationContext {

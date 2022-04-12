@@ -55,6 +55,9 @@ import org.springframework.util.ObjectUtils;
  * @see #scan(String...)
  * @see ReactiveWebServerApplicationContext
  * @see AnnotationConfigApplicationContext
+ *
+ * @tips 继承 ReactiveWebServerApplicationContext 类，实现 AnnotationConfigRegistry 接口，
+ * 作用和 AnnotationConfigServletWebServerApplicationContext 相同，就不重复赘述了。
  */
 public class AnnotationConfigReactiveWebServerApplicationContext extends ReactiveWebServerApplicationContext
 		implements AnnotationConfigRegistry {
