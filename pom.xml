@@ -10,7 +10,8 @@
 	<name>Spring Boot Build</name>
 	<description>Spring Boot Build</description>
 	<properties>
-		<revision>2.1.19.BUILD-SNAPSHOT</revision>
+<!--		<revision>2.1.19.BUILD-SNAPSHOT</revision> 更改版本-->
+		<revision>2.1.16.RELEASE</revision>
 		<main.basedir>${basedir}</main.basedir>
 	</properties>
 	<!-- Most elements are in profiles so they are stripped out during maven-flatten -->
@@ -233,7 +234,7 @@
 											kotlin-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.1.51,)
+											[1.5,)
 										</versionRange>
 										<goals>
 											<goal>compile</goal>
