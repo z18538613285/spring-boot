@@ -56,6 +56,10 @@ class ServletWebServerFactoryConfiguration {
 	@ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
 	static class EmbeddedTomcat {
 
+		/**
+		 * 只要类路径下存在 Tomcat 类，以及在 Web 环境下，就会触发 Spring Boot 的自动配置。
+		 * @return
+		 */
 		@Bean
 		public TomcatServletWebServerFactory tomcatServletWebServerFactory() {
 			return new TomcatServletWebServerFactory();

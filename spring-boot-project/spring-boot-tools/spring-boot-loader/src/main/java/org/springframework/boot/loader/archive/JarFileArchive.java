@@ -195,6 +195,8 @@ public class JarFileArchive implements Archive {
 
 	/**
 	 * {@link Archive.Entry} implementation backed by a {@link JarEntry}.
+	 *
+	 * @tips 基于 JarEntry 实现，表示 FAT JAR 嵌入资源
 	 */
 	private static class JarFileEntry implements Entry {
 

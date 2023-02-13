@@ -34,6 +34,7 @@ import org.springframework.boot.loader.Launcher;
  * @tips Archive 接口，是 spring-boot-loader 项目定义的档案抽象，
  * ExplodedArchive 是针对目录的 Archive 实现类。
  * JarFileArchive 是针对 jar 包的 Archive 实现类。
+ * 这也从实现层面证明了 JarLauncher 支持 JAR 和 文件系统两种启动方式
  */
 public interface Archive extends Iterable<Archive.Entry> {
 

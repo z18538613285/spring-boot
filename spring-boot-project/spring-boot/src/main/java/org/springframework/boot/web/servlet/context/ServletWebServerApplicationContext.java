@@ -89,6 +89,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @see AnnotationConfigServletWebServerApplicationContext
  * @see XmlServletWebServerApplicationContext
  * @see ServletWebServerFactory
+ *
+ * @tips EmbeddedWebApplicationContext 的逻辑，应该是修改到了 ServletWebServerApplicationContext 中。
  */
 public class ServletWebServerApplicationContext extends GenericWebApplicationContext
 		implements ConfigurableWebServerApplicationContext {
@@ -150,6 +152,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	protected void onRefresh() {
 		super.onRefresh();
 		try {
+			// 第二层
 			createWebServer();
 		}
 		catch (Throwable ex) {
@@ -177,6 +180,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 		ServletContext servletContext = getServletContext();
 		if (webServer == null && servletContext == null) {
 			ServletWebServerFactory factory = getWebServerFactory();
+												// 第三层
 			this.webServer = factory.getWebServer(getSelfInitializer());
 		}
 		else if (servletContext != null) {
@@ -220,10 +224,13 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 		return this::selfInitialize;
 	}
 
+
 	private void selfInitialize(ServletContext servletContext) throws ServletException {
 		prepareWebApplicationContext(servletContext);
 		registerApplicationScope(servletContext);
 		WebApplicationContextUtils.registerEnvironmentBeans(getBeanFactory(), servletContext);
+		// 第四层
+		//调用 #getServletContextInitializerBeans() 方法，获得 ServletContextInitializer 数组就成了关键。
 		for (ServletContextInitializer beans : getServletContextInitializerBeans()) {
 			beans.onStartup(servletContext);
 		}
@@ -248,8 +255,11 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	 * {@link ServletContextInitializer}, {@link Servlet}, {@link Filter} and certain
 	 * {@link EventListener} beans.
 	 * @return the servlet initializer beans
+	 *
+	 * @tips 用来加载 Servlet 和 Filter 的。
 	 */
 	protected Collection<ServletContextInitializer> getServletContextInitializerBeans() {
+		// 第五层
 		return new ServletContextInitializerBeans(getBeanFactory());
 	}
 

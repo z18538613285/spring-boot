@@ -68,6 +68,8 @@ import org.springframework.util.StringUtils;
  * @author Madhura Bhave
  * @since 1.3.0
  * @see EnableAutoConfiguration
+ *
+ * @tips AutoConfigurationImportSelector 是 Starter 自动化导入的关键
  */
 public class AutoConfigurationImportSelector implements DeferredImportSelector, BeanClassLoaderAware,
 		ResourceLoaderAware, BeanFactoryAware, EnvironmentAware, Ordered {

@@ -330,7 +330,9 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 	 * @param initializers initializers to apply
 	 */
 	protected void configureContext(Context context, ServletContextInitializer[] initializers) {
+		// 一共有三个 ServletContextInitializer，包含了 EmbeddedWebApplicationContext(老版本，新版本为ServletWebServerApplicationContext) 中的匿名实现。
 		TomcatStarter starter = new TomcatStarter(initializers);
+		// 判断使用的是内嵌的 Tomcat ，所以将 TomcatStarter 作为 Initializer 。
 		if (context instanceof TomcatEmbeddedContext) {
 			TomcatEmbeddedContext embeddedContext = (TomcatEmbeddedContext) context;
 			embeddedContext.setStarter(starter);

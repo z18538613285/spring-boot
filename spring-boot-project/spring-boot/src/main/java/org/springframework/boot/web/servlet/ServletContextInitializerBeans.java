@@ -82,6 +82,7 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		this.initializers = new LinkedMultiValueMap<>();
 		this.initializerTypes = (initializerTypes.length != 0) ? Arrays.asList(initializerTypes)
 				: Collections.singletonList(ServletContextInitializer.class);
+		// 第六层
 		addServletContextInitializerBeans(beanFactory);
 		addAdaptableBeans(beanFactory);
 		List<ServletContextInitializer> sortedInitializers = this.initializers.values().stream()
@@ -93,6 +94,9 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 
 	private void addServletContextInitializerBeans(ListableBeanFactory beanFactory) {
 		for (Class<? extends ServletContextInitializer> initializerType : this.initializerTypes) {
+			/**
+			 * getOrderedBeansOfType 便是去容器中寻找注册过得 ServletContextInitializer ，这时候就可以把之前那些 RegistrationBean 全部加载出来了。并且 RegistrationBean 还实现了 Ordered 接口，在这儿用于排序。
+			 */
 			for (Entry<String, ? extends ServletContextInitializer> initializerBean : getOrderedBeansOfType(beanFactory,
 					initializerType)) {
 				addServletContextInitializerBean(initializerBean.getKey(), initializerBean.getValue(), beanFactory);

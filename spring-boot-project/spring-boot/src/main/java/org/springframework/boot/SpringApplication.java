@@ -305,10 +305,13 @@ public class SpringApplication {
 			ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
 			configureIgnoreBeanInfo(environment);
 			Banner printedBanner = printBanner(environment);
+			// SpringContext创建
 			context = createApplicationContext();
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
+			// bean的加载
 			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
+			// Spring 扩展属性的加载
 			refreshContext(context);
 			afterRefresh(context, applicationArguments);
 			stopWatch.stop();

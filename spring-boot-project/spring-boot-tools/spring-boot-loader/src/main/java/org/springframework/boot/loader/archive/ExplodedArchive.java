@@ -213,6 +213,9 @@ public class ExplodedArchive implements Archive {
 
 	/**
 	 * {@link Entry} backed by a File.
+	 *
+	 * @tips 基于 文件系统实现
+	 *
 	 */
 	private static class FileEntry implements Entry {
 

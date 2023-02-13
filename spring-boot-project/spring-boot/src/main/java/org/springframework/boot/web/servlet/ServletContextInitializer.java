@@ -39,6 +39,9 @@ import org.springframework.web.WebApplicationInitializer;
  * @author Phillip Webb
  * @since 1.4.0
  * @see WebApplicationInitializer
+ *
+ * @tips 虽然 ServletContainerInitializer 不能被内嵌容器加载，
+ * ServletContextInitializer 却能被 Spring Boot 的 EmbeddedWebApplicationContext 加载到，从而装配其中的 servlet 和 filter。
  */
 @FunctionalInterface
 public interface ServletContextInitializer {

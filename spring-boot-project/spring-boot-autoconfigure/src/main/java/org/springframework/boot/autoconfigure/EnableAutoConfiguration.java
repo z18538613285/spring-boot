@@ -72,6 +72,7 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
  * @see ConditionalOnClass
  * @see AutoConfigureAfter
  * @see SpringBootApplication
+ *
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
