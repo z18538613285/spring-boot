@@ -50,6 +50,9 @@ import org.springframework.util.StringUtils;
  * @author Dave Syer
  * @author Matt Benson
  * @since 1.0.0
+ *
+ * @tips 提供随机值的 PropertySource 实现类
+ *
  */
 public class RandomValuePropertySource extends PropertySource<Random> {
 
@@ -70,14 +73,21 @@ public class RandomValuePropertySource extends PropertySource<Random> {
 		this(RANDOM_PROPERTY_SOURCE_NAME);
 	}
 
+	/**
+	 * 获得 name 对应的随机值。
+	 * @param name
+	 * @return
+	 */
 	@Override
 	public Object getProperty(String name) {
+		// <1> 必须以 random. 前缀
 		if (!name.startsWith(PREFIX)) {
 			return null;
 		}
 		if (logger.isTraceEnabled()) {
 			logger.trace("Generating random property for '" + name + "'");
 		}
+		// <2> 根据类型，获得随机值
 		return getRandomValue(name.substring(PREFIX.length()));
 	}
 
@@ -88,10 +98,12 @@ public class RandomValuePropertySource extends PropertySource<Random> {
 		if (type.equals("long")) {
 			return getSource().nextLong();
 		}
+		// int 范围
 		String range = getRange(type, "int");
 		if (range != null) {
 			return getNextIntInRange(range);
 		}
+		// long 范围
 		range = getRange(type, "long");
 		if (range != null) {
 			return getNextLongInRange(range);

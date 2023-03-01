@@ -36,10 +36,14 @@ import org.springframework.util.ObjectUtils;
  * @author Dave Syer
  * @author Eric Bottard
  * @since 1.0.0
+ *
+ * @tips 容器关闭时发出通知，如果父容器关闭，那么自容器也一起关闭。
  */
 public class ParentContextCloserApplicationListener
 		implements ApplicationListener<ParentContextAvailableEvent>, ApplicationContextAware, Ordered {
-
+	/**
+	 * 顺序
+	 */
 	private int order = Ordered.LOWEST_PRECEDENCE - 10;
 
 	private ApplicationContext context;
@@ -59,9 +63,13 @@ public class ParentContextCloserApplicationListener
 		maybeInstallListenerInParent(event.getApplicationContext());
 	}
 
+	// 向父容器添加监听器，监听父容器的关闭事件。
 	private void maybeInstallListenerInParent(ConfigurableApplicationContext child) {
+		// 如果 child 是当前容器 并且父容器是 ConfigurableApplicationContext 类型
 		if (child == this.context && child.getParent() instanceof ConfigurableApplicationContext) {
+			// 向父容器添加监听器，监听父容器的关闭事件
 			ConfigurableApplicationContext parent = (ConfigurableApplicationContext) child.getParent();
+			// 创建后的 ContextCloserListener 对象，向父容器 parent 中注册。
 			parent.addApplicationListener(createContextCloserListener(child));
 		}
 	}
@@ -83,6 +91,7 @@ public class ParentContextCloserApplicationListener
 
 		private WeakReference<ConfigurableApplicationContext> childContext;
 
+		// 监听父容器关闭时，关闭自己（容器）
 		public ContextCloserListener(ConfigurableApplicationContext childContext) {
 			this.childContext = new WeakReference<>(childContext);
 		}
@@ -90,7 +99,10 @@ public class ParentContextCloserApplicationListener
 		@Override
 		public void onApplicationEvent(ContextClosedEvent event) {
 			ConfigurableApplicationContext context = this.childContext.get();
-			if ((context != null) && (event.getApplicationContext() == context.getParent()) && context.isActive()) {
+			if ((context != null)
+					&& (event.getApplicationContext() == context.getParent()) // 如果是父容器
+					&& context.isActive()) { // 并且当前容器是启动状态
+				// 关闭当前容器
 				context.close();
 			}
 		}

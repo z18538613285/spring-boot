@@ -32,6 +32,8 @@ import org.springframework.util.StringUtils;
  * @author Phillip Webb
  * @since 1.2.1
  * @see #get(PropertyResolver)
+ *
+ * @tips 日志文件
  */
 public class LogFile {
 
@@ -46,9 +48,13 @@ public class LogFile {
 	 * written.
 	 */
 	public static final String PATH_PROPERTY = "logging.path";
-
+	/**
+	 * 文件名
+	 */
 	private final String file;
-
+	/**
+	 * 文件路径
+	 */
 	private final String path;
 
 	/**
@@ -72,6 +78,8 @@ public class LogFile {
 
 	/**
 	 * Apply log file details to {@code LOG_PATH} and {@code LOG_FILE} system properties.
+	 *
+	 * @tips 应用 file、path 到系统属性。
 	 */
 	public void applyToSystemProperties() {
 		applyTo(System.getProperties());
@@ -110,10 +118,14 @@ public class LogFile {
 	 * properties
 	 * @return a {@link LogFile} or {@code null} if the environment didn't contain any
 	 * suitable properties
+	 *
+	 * @tips 获得（创建）LogFile 对象。
 	 */
 	public static LogFile get(PropertyResolver propertyResolver) {
+		// <1> 获得 file 和 path 属性
 		String file = propertyResolver.getProperty(FILE_PROPERTY);
 		String path = propertyResolver.getProperty(PATH_PROPERTY);
+		// <2> 创建 LogFile 对象
 		if (StringUtils.hasLength(file) || StringUtils.hasLength(path)) {
 			return new LogFile(file, path);
 		}

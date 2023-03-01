@@ -53,6 +53,12 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
  * @see #scan(String...)
  * @see ServletWebServerApplicationContext
  * @see AnnotationConfigWebApplicationContext
+ *
+ * @tips 进一步提供了两个功能：
+ * 从指定的 basePackages 包中，扫描 BeanDefinition 们。
+ * 从指定的 annotatedClasses 注解的配置类（Configuration）中，读取 BeanDefinition 们。
+ *
+ * 不过一般情况下，用不到这两个功能。
  */
 public class AnnotationConfigServletWebServerApplicationContext extends ServletWebServerApplicationContext
 		implements AnnotationConfigRegistry {
@@ -61,8 +67,13 @@ public class AnnotationConfigServletWebServerApplicationContext extends ServletW
 
 	private final ClassPathBeanDefinitionScanner scanner;
 
+	/**
+	 * 需要被 {@link #reader} 读取的注册类们
+	 */
 	private final Set<Class<?>> annotatedClasses = new LinkedHashSet<>();
-
+	/**
+	 * 需要被 {@link #scanner} 扫描的包
+	 */
 	private String[] basePackages;
 
 	/**
@@ -96,7 +107,9 @@ public class AnnotationConfigServletWebServerApplicationContext extends ServletW
 	 */
 	public AnnotationConfigServletWebServerApplicationContext(Class<?>... annotatedClasses) {
 		this();
+		// <1> 注册指定的注解的类们
 		register(annotatedClasses);
+		// 初始化 Spring 容器
 		refresh();
 	}
 
@@ -108,7 +121,9 @@ public class AnnotationConfigServletWebServerApplicationContext extends ServletW
 	 */
 	public AnnotationConfigServletWebServerApplicationContext(String... basePackages) {
 		this();
+		// <2> 扫描指定包
 		scan(basePackages);
+		// 初始化 Spring 容器
 		refresh();
 	}
 
@@ -191,18 +206,26 @@ public class AnnotationConfigServletWebServerApplicationContext extends ServletW
 		this.basePackages = basePackages;
 	}
 
+	/**
+	 * 实现自 AbstractApplicationContext 抽象类
+	 */
 	@Override
 	protected void prepareRefresh() {
+		// 清空 scanner 的缓存   在 Spring 容器初始化前，需要清空 scanner 的缓存。
 		this.scanner.clearCache();
+		// 调用父类
 		super.prepareRefresh();
 	}
 
 	@Override
 	protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		// 调用父类
 		super.postProcessBeanFactory(beanFactory);
+		// 扫描指定的包
 		if (this.basePackages != null && this.basePackages.length > 0) {
 			this.scanner.scan(this.basePackages);
 		}
+		// 注册指定的注解的类们定的
 		if (!this.annotatedClasses.isEmpty()) {
 			this.reader.register(ClassUtils.toClassArray(this.annotatedClasses));
 		}

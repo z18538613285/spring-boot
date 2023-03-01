@@ -27,6 +27,9 @@ import org.springframework.core.io.Resource;
  * @author Stephane Nicoll
  * @author Brian Clozel
  * @since 2.0.0
+ *
+ * @tips 通用的 Reactive Web ApplicationContext 实现类
+ *
  */
 public class GenericReactiveWebApplicationContext extends GenericApplicationContext
 		implements ConfigurableReactiveWebApplicationContext {
@@ -50,12 +53,12 @@ public class GenericReactiveWebApplicationContext extends GenericApplicationCont
 		super(beanFactory);
 	}
 
-	@Override
+	@Override // 覆写 AbstractApplicationContext 方法
 	protected ConfigurableEnvironment createEnvironment() {
 		return new StandardReactiveWebEnvironment();
 	}
 
-	@Override
+	@Override // 覆写 AbstractApplicationContext 方法
 	protected Resource getResourceByPath(String path) {
 		// We must be careful not to expose classpath resources
 		return new FilteredReactiveWebContextResource(path);

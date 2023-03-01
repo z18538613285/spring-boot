@@ -33,6 +33,8 @@ import org.springframework.context.annotation.Import;
  *
  * @author Dave Syer
  * @since 1.0.0
+ *
+ * @tips 可以将指定带有 @ConfigurationProperties 的类，注册成 BeanDefinition ，从而创建成 Bean 对象。
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

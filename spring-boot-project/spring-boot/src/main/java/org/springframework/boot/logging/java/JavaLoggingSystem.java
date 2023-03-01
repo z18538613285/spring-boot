@@ -47,6 +47,8 @@ import org.springframework.util.StringUtils;
  * @author Andy Wilkinson
  * @author Ben Hale
  * @since 1.0.0
+ *
+ * @tips 基于 JUL 的 LoggingSystem 实现类。
  */
 public class JavaLoggingSystem extends AbstractLoggingSystem {
 

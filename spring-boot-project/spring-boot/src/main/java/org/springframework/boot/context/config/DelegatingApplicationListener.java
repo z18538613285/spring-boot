@@ -40,6 +40,9 @@ import org.springframework.util.StringUtils;
  * @author Dave Syer
  * @author Phillip Webb
  * @since 1.0.0
+ *
+ * @tips 和 「DelegatingApplicationContextInitializer」 是类似的，
+ * 只是读取的是环境变量 "context.listener.classes" 对应的 ApplicationContextInitializer 实现类们。
  */
 public class DelegatingApplicationListener implements ApplicationListener<ApplicationEvent>, Ordered {
 

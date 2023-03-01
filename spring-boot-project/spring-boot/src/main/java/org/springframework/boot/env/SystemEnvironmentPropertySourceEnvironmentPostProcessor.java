@@ -36,6 +36,8 @@ import org.springframework.core.env.SystemEnvironmentPropertySource;
  *
  * @author Madhura Bhave
  * @since 2.0.0
+ *
+ * @tips 实现将 environment 中的 systemEnvironment 对应的 PropertySource 属性源对象，替换成 OriginAwareSystemEnvironmentPropertySource 对象。
  */
 public class SystemEnvironmentPropertySourceEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 

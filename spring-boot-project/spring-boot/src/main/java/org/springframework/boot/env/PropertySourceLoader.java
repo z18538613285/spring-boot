@@ -30,12 +30,16 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
  * @author Dave Syer
  * @author Phillip Webb
  * @since 1.0.0
+ *
+ * @tips 加载指定配置文件，返回 PropertySource 数组
  */
 public interface PropertySourceLoader {
 
 	/**
 	 * Returns the file extensions that the loader supports (excluding the '.').
 	 * @return the file extensions
+	 *
+	 * @tips 获得可以处理的配置文件的后缀
 	 */
 	String[] getFileExtensions();
 
@@ -48,6 +52,10 @@ public interface PropertySourceLoader {
 	 * @param resource the resource to load
 	 * @return a list property sources
 	 * @throws IOException if the source cannot be loaded
+	 *
+	 * @tips 加载指定配置文件，返回 PropertySource 数组
+	 *
+	 * 为什么一个配置文件，加载后会存在多个 PropertySource 对象呢？
 	 */
 	List<PropertySource<?>> load(String name, Resource resource) throws IOException;
 

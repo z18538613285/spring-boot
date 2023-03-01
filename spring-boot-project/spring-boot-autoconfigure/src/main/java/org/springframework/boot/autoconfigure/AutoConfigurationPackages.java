@@ -58,6 +58,8 @@ public abstract class AutoConfigurationPackages {
 	 * available.
 	 * @param beanFactory the source bean factory
 	 * @return true if there are auto-config packages available
+	 *
+	 * @tips 判断是否存在该 BEAN 在传入的容器中。
 	 */
 	public static boolean has(BeanFactory beanFactory) {
 		return beanFactory.containsBean(BEAN) && !get(beanFactory).isEmpty();
@@ -68,6 +70,8 @@ public abstract class AutoConfigurationPackages {
 	 * @param beanFactory the source bean factory
 	 * @return a list of auto-configuration packages
 	 * @throws IllegalStateException if auto-configuration is not enabled
+	 *
+	 * @tips 获得 BEAN
 	 */
 	public static List<String> get(BeanFactory beanFactory) {
 		try {
@@ -88,15 +92,20 @@ public abstract class AutoConfigurationPackages {
 	 * configuration class or classes.
 	 * @param registry the bean definition registry
 	 * @param packageNames the package names to set
+	 *
+	 * @tips 注册一个用于存储报名（package）的 Bean 到 Spring IoC 容器中。
 	 */
 	public static void register(BeanDefinitionRegistry registry, String... packageNames) {
+		// <1> 如果已经存在该 BEAN ，则修改其包（package）属性
 		if (registry.containsBeanDefinition(BEAN)) {
 			BeanDefinition beanDefinition = registry.getBeanDefinition(BEAN);
 			ConstructorArgumentValues constructorArguments = beanDefinition.getConstructorArgumentValues();
 			constructorArguments.addIndexedArgumentValue(0, addBasePackages(constructorArguments, packageNames));
 		}
+		// <2> 如果不存在该 BEAN ，则创建一个 Bean ，并进行注册
 		else {
 			GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+			// 注册的 BEAN 的类型，为 BasePackages 类型。它是 AutoConfigurationPackages 的内部类。
 			beanDefinition.setBeanClass(BasePackages.class);
 			beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(0, packageNames);
 			beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
@@ -105,7 +114,9 @@ public abstract class AutoConfigurationPackages {
 	}
 
 	private static String[] addBasePackages(ConstructorArgumentValues constructorArguments, String[] packageNames) {
+		// 获得已存在的
 		String[] existing = (String[]) constructorArguments.getIndexedArgumentValue(0, String[].class).getValue();
+		// 进行合并
 		Set<String> merged = new LinkedHashSet<>();
 		merged.addAll(Arrays.asList(existing));
 		merged.addAll(Arrays.asList(packageNames));
@@ -115,6 +126,8 @@ public abstract class AutoConfigurationPackages {
 	/**
 	 * {@link ImportBeanDefinitionRegistrar} to store the base package from the importing
 	 * configuration.
+	 *
+	 * @tips 用于处理 @AutoConfigurationPackage 注解
 	 */
 	static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports {
 
@@ -132,9 +145,13 @@ public abstract class AutoConfigurationPackages {
 
 	/**
 	 * Wrapper for a package import.
+	 *
+	 * @tips 用于获得包名。
 	 */
 	private static final class PackageImport {
-
+		/**
+		 * 包名
+		 */
 		private final String packageName;
 
 		PackageImport(AnnotationMetadata metadata) {

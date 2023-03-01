@@ -43,13 +43,22 @@ import org.springframework.data.repository.Repository;
  * @author Phillip Webb
  * @author Stephane Nicoll
  * @since 1.2.0
+ *
+ * @tips 自动配置 V.S 自动装配
+ * 自动配置：是 Spring Boot 提供的，实现通过 jar 包的依赖，能够自动配置应用程序。
+ * 例如说：我们引入 spring-boot-starter-web 之后，就自动引入了 Spring MVC 相关的 jar 包，从而自动配置 Spring MVC 。
+ *
+ * 自动装配：是 Spring 提供的 IoC 注入方式，
+ *
+ * 通过使用它，不仅仅能标记这是一个 Spring Boot 应用，而且能够开启自动配置的功能。
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Inherited
-@SpringBootConfiguration
+@Inherited //使用此注解声明出来的自定义注解，在使用此自定义注解时，如果注解在类上面时，子类会自动继承此注解，否则的话，子类不会继承此注解。
+@SpringBootConfiguration //标记这是一个 Spring Boot 配置类。
 @EnableAutoConfiguration
+// 扫描指定路径下的 Component（@Componment、@Configuration、@Service 等等）。
 @ComponentScan(excludeFilters = { @Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
 		@Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
 public @interface SpringBootApplication {

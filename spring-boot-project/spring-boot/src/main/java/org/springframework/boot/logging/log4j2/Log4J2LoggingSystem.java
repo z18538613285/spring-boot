@@ -57,6 +57,8 @@ import org.springframework.util.StringUtils;
  * @author Alexander Heusingfeld
  * @author Ben Hale
  * @since 1.2.0
+ *
+ * @tips 基于 Log4J2 的 LoggingSystem 实现类。
  */
 public class Log4J2LoggingSystem extends Slf4JLoggingSystem {
 

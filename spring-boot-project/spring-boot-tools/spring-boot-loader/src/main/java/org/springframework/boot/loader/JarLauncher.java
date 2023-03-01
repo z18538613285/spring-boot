@@ -58,6 +58,7 @@ public class JarLauncher extends ExecutableArchiveLauncher {
 	}
 
 	public static void main(String[] args) throws Exception {
+		// 整体的启动逻辑，由父类 Launcher 提供
 		new JarLauncher().launch(args);
 	}
 

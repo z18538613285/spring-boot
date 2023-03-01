@@ -31,6 +31,8 @@ import org.springframework.util.Assert;
  * @author Madhura Bhave
  * @author Vedran Pavic
  * @since 2.0.0
+ *
+ * @tips LoggingSystem 的配置类。
  */
 public class LoggingSystemProperties {
 
@@ -100,15 +102,18 @@ public class LoggingSystemProperties {
 	}
 
 	public void apply(LogFile logFile) {
+		// <1> 获得 PropertyResolver 对象
 		PropertyResolver resolver = getPropertyResolver();
+		// <2> 解析配置文件到系统属性中
 		setSystemProperty(resolver, EXCEPTION_CONVERSION_WORD, "exception-conversion-word");
-		setSystemProperty(PID_KEY, new ApplicationPid().toString());
+		setSystemProperty(PID_KEY, new ApplicationPid().toString()); // 应用进程编号
 		setSystemProperty(resolver, CONSOLE_LOG_PATTERN, "pattern.console");
 		setSystemProperty(resolver, FILE_LOG_PATTERN, "pattern.file");
 		setSystemProperty(resolver, FILE_MAX_HISTORY, "file.max-history");
 		setSystemProperty(resolver, FILE_MAX_SIZE, "file.max-size");
 		setSystemProperty(resolver, LOG_LEVEL_PATTERN, "pattern.level");
 		setSystemProperty(resolver, LOG_DATEFORMAT_PATTERN, "pattern.dateformat");
+		// <3> 如果 logFile 非空，则应用配置
 		if (logFile != null) {
 			logFile.applyToSystemProperties();
 		}

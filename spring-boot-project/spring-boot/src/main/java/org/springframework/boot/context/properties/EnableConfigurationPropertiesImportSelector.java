@@ -46,6 +46,8 @@ import org.springframework.util.StringUtils;
  * @author Dave Syer
  * @author Christian Dupuis
  * @author Stephane Nicoll
+ *
+ * @tips 处理 @EnableConfigurationProperties 注解
  */
 class EnableConfigurationPropertiesImportSelector implements ImportSelector {
 
@@ -64,12 +66,16 @@ class EnableConfigurationPropertiesImportSelector implements ImportSelector {
 
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
+			// 将 @EnableConfigurationProperties 注解指定的类，逐个注册成对应的 BeanDefinition 对象。
 			getTypes(metadata).forEach((type) -> register(registry, (ConfigurableListableBeanFactory) registry, type));
 		}
 
+		// 获得 @EnableConfigurationProperties 注解指定的类的数组。
 		private List<Class<?>> getTypes(AnnotationMetadata metadata) {
+			// 获得 @EnableConfigurationProperties 注解
 			MultiValueMap<String, Object> attributes = metadata
 					.getAllAnnotationAttributes(EnableConfigurationProperties.class.getName(), false);
+			// 获得 value 属性
 			return collectClasses((attributes != null) ? attributes.get("value") : Collections.emptyList());
 		}
 
@@ -80,7 +86,9 @@ class EnableConfigurationPropertiesImportSelector implements ImportSelector {
 
 		private void register(BeanDefinitionRegistry registry, ConfigurableListableBeanFactory beanFactory,
 				Class<?> type) {
+			// <2.1> 通过 @ConfigurationProperties 注解，获得最后要生成的 BeanDefinition 的名字。格式为 prefix-类全名 or 类全名
 			String name = getName(type);
+			// <2.2> 判断是否已经有该名字的 BeanDefinition 的名字。没有，才进行注册
 			if (!containsBeanDefinition(beanFactory, name)) {
 				registerBeanDefinition(registry, name, type);
 			}
@@ -93,20 +101,26 @@ class EnableConfigurationPropertiesImportSelector implements ImportSelector {
 		}
 
 		private boolean containsBeanDefinition(ConfigurableListableBeanFactory beanFactory, String name) {
+			// 判断是否存在 BeanDefinition 。如果有，则返回 true
 			if (beanFactory.containsBeanDefinition(name)) {
 				return true;
 			}
+			// 获得父容器，判断是否存在
 			BeanFactory parent = beanFactory.getParentBeanFactory();
 			if (parent instanceof ConfigurableListableBeanFactory) {
 				return containsBeanDefinition((ConfigurableListableBeanFactory) parent, name);
 			}
+			// 返回 false ，说明不存在
 			return false;
 		}
 
 		private void registerBeanDefinition(BeanDefinitionRegistry registry, String name, Class<?> type) {
+			// 断言，判断该类有 @ConfigurationProperties 注解
 			assertHasAnnotation(type);
+			// 创建 GenericBeanDefinition 对象
 			GenericBeanDefinition definition = new GenericBeanDefinition();
 			definition.setBeanClass(type);
+			// 注册到 BeanDefinitionRegistry 中
 			registry.registerBeanDefinition(name, definition);
 		}
 

@@ -32,6 +32,8 @@ import org.springframework.util.ClassUtils;
  * @author Phillip Webb
  * @author Dave Syer
  * @since 1.0.0
+ *
+ * @tips 初始化 Liquibase 的 ServiceLocator 对象
  */
 public class LiquibaseServiceLocatorApplicationListener implements ApplicationListener<ApplicationStartingEvent> {
 
@@ -39,6 +41,7 @@ public class LiquibaseServiceLocatorApplicationListener implements ApplicationLi
 
 	@Override
 	public void onApplicationEvent(ApplicationStartingEvent event) {
+		// <1> 如果存在 CustomResolverServiceLocator 类
 		if (ClassUtils.isPresent("liquibase.servicelocator.CustomResolverServiceLocator",
 				event.getSpringApplication().getClassLoader())) {
 			new LiquibasePresent().replaceServiceLocator();
@@ -51,8 +54,10 @@ public class LiquibaseServiceLocatorApplicationListener implements ApplicationLi
 	private static class LiquibasePresent {
 
 		public void replaceServiceLocator() {
+			// <2> 创建 CustomResolverServiceLocator 对象
 			CustomResolverServiceLocator customResolverServiceLocator = new CustomResolverServiceLocator(
 					new SpringPackageScanClassResolver(logger));
+			// 设置 ServiceLocator 的 `instance` 属性
 			ServiceLocator.setInstance(customResolverServiceLocator);
 		}
 

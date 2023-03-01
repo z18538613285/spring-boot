@@ -21,6 +21,9 @@ package org.springframework.boot.logging;
  *
  * @author Phillip Webb
  * @since 1.0.0
+ *
+ * @tips Spring Boot 日志枚举类
+ * 每个日志框架，都有其日志级别。通过 LogLevel 枚举类，和它们映射。
  */
 public enum LogLevel {
 

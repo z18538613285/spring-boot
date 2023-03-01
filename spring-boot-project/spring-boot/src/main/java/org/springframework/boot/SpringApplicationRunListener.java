@@ -32,6 +32,9 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
  * @author Dave Syer
  * @author Andy Wilkinson
  * @since 1.0.0
+ *
+ * @tips SpringApplication 运行的监听器接口。
+ * SpringApplicationRunListener 的实现类，只有 EventPublishingRunListener 类
  */
 public interface SpringApplicationRunListener {
 

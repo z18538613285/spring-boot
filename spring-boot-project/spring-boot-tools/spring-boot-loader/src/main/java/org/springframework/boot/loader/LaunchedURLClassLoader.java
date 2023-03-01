@@ -36,7 +36,8 @@ import org.springframework.boot.loader.jar.Handler;
  * @author Andy Wilkinson
  * @since 1.0.0
  *
- * @tips 是 spring-boot-loader 项目自定义的类加载器，实现对 jar 包中 META-INF/classes 目录下的类和 META-INF/lib 内嵌的 jar 包中的类的加载。
+ * @tips 是 spring-boot-loader 项目自定义的类加载器，
+ * 实现对 jar 包中 META-INF/classes 目录下的类和 META-INF/lib 内嵌的 jar 包中的类的加载。
  */
 public class LaunchedURLClassLoader extends URLClassLoader {
 

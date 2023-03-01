@@ -81,6 +81,8 @@ public abstract class ExecutableArchiveLauncher extends Launcher {
 	 * to the classpath. The method is called once for each entry.
 	 * @param entry the jar entry
 	 * @return {@code true} if the entry is a nested item (jar or folder)
+	 *
+	 * @tips 过滤获得，BOOT-INF/classes/ 目录下的类，以及 BOOT-INF/lib/ 的内嵌 jar 包。
 	 */
 	protected abstract boolean isNestedArchive(Archive.Entry entry);
 

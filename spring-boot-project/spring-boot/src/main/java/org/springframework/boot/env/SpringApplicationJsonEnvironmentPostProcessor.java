@@ -52,6 +52,9 @@ import org.springframework.web.context.support.StandardServletEnvironment;
  * @author Madhura Bhave
  * @author Artsiom Yudovin
  * @since 1.3.0
+ *
+ * @tips 解析 environment 中的 spring.application.json 或 SPRING_APPLICATION_JSON 对应的 JSON 格式的属性值，
+ * 创建新的 PropertySource 对象，添加到其中。
  */
 public class SpringApplicationJsonEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 

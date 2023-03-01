@@ -36,6 +36,15 @@ import org.springframework.core.annotation.AliasFor;
  * @since 1.0.0
  * @see ConfigurationPropertiesBindingPostProcessor
  * @see EnableConfigurationProperties
+ *
+ * @tips 如何将配置文件自动设置到被注解的类。
+ * 使用方法
+ * 第一种，@Component + @ConfigurationProperties 。
+ * 第二种，@EnableConfigurationProperties + ConfigurationProperties 。
+ *
+ * 更多的是使用第一种。当然，第二种的 @EnableConfigurationProperties 的效果，也是将指定的类，
+ * 实现和 @Component 被注解的类是一样的，创建成 Bean 对象。
+ * 这样，@ConfigurationProperties 就可以将配置文件自动设置到该 Bean 对象咧。
  */
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

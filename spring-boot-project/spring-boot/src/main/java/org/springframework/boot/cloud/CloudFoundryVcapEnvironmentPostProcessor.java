@@ -88,6 +88,8 @@ import org.springframework.util.StringUtils;
  * @author Dave Syer
  * @author Andy Wilkinson
  * @since 1.3.0
+ *
+ * @tips 实现对 Cloud Foundry 的支持。
  */
 public class CloudFoundryVcapEnvironmentPostProcessor
 		implements EnvironmentPostProcessor, Ordered, ApplicationListener<ApplicationPreparedEvent> {

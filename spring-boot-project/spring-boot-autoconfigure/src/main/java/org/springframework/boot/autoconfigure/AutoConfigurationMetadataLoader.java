@@ -30,6 +30,8 @@ import org.springframework.util.StringUtils;
  * Internal utility used to load {@link AutoConfigurationMetadata}.
  *
  * @author Phillip Webb
+ *
+ * @tips AutoConfigurationMetadata 加载器。
  */
 final class AutoConfigurationMetadataLoader {
 
@@ -44,12 +46,16 @@ final class AutoConfigurationMetadataLoader {
 
 	static AutoConfigurationMetadata loadMetadata(ClassLoader classLoader, String path) {
 		try {
+			// <1> 获得 PATH 对应的 URL 们
+			// 而 PATH 就是 "META-INF/spring-autoconfigure-metadata.properties" 文件
 			Enumeration<URL> urls = (classLoader != null) ? classLoader.getResources(path)
 					: ClassLoader.getSystemResources(path);
+			// <2> 遍历 URL 数组，读取到 properties 中
 			Properties properties = new Properties();
 			while (urls.hasMoreElements()) {
 				properties.putAll(PropertiesLoaderUtils.loadProperties(new UrlResource(urls.nextElement())));
 			}
+			// <3> 将 properties 转换成 PropertiesAutoConfigurationMetadata 对象
 			return loadMetadata(properties);
 		}
 		catch (IOException ex) {
@@ -65,7 +71,9 @@ final class AutoConfigurationMetadataLoader {
 	 * {@link AutoConfigurationMetadata} implementation backed by a properties file.
 	 */
 	private static class PropertiesAutoConfigurationMetadata implements AutoConfigurationMetadata {
-
+		/**
+		 * Properties 对象
+		 */
 		private final Properties properties;
 
 		PropertiesAutoConfigurationMetadata(Properties properties) {

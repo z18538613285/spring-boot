@@ -58,10 +58,13 @@ public abstract class Launcher {
 	 */
 	protected void launch(String[] args) throws Exception {
 		// 调用 JarFile 的 #registerUrlProtocolHandler() 方法，注册 Spring Boot 自定义的 URLStreamHandler 实现类，用于 jar 包的加载读取。
+		// <1> 注册 URL 协议的处理器
 		JarFile.registerUrlProtocolHandler();
 		// 调用自身的 #createClassLoader(List<Archive> archives) 方法，创建自定义的 ClassLoader 实现类，用于从 jar 包中加载类。
+		// <2> 创建类加载器
 		ClassLoader classLoader = createClassLoader(getClassPathArchives());
 		// 执行我们声明的 Spring Boot 启动类，进行 Spring Boot 应用的启动。
+		// <3> 执行启动类的 main 方法
 		launch(args, getMainClass(), classLoader);
 	}
 
@@ -157,6 +160,8 @@ public abstract class Launcher {
 		}
 		// 如果是目录，则使用 ExplodedArchive 进行展开
 		// 如果不是目录，则使用 JarFileArchive
+		//root 路径为 jar 包的绝对地址，也就是说创建 JarFileArchive 对象。原因是，Launcher 所在包为 org 下，它的根目录当然是 jar 包的绝对路径哈！
+		//BOOT-INF/classes/ 目录被归类为一个 Archive 对象，而 BOOT-INF/lib/ 目录下的每个内嵌 jar 包都对应一个 Archive 对象。
 		return (root.isDirectory() ? new ExplodedArchive(root) : new JarFileArchive(root));
 	}
 

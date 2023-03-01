@@ -30,6 +30,8 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.3.0
  * @see EnableConfigurationProperties
  * @see ConfigurationProperties
+ *
+ * @tips 默认情况下，@EnableConfigurationProperties 会通过 ConfigurationPropertiesAutoConfiguration 类，进行开启。
  */
 @Configuration
 @EnableConfigurationProperties

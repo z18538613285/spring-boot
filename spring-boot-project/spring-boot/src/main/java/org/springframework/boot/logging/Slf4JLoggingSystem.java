@@ -31,6 +31,8 @@ import org.springframework.util.ClassUtils;
  *
  * @author Andy Wilkinson
  * @since 1.2.0
+ *
+ * @tips 基于 Slf4J 的 LoggingSystem 的抽象基类。
  */
 public abstract class Slf4JLoggingSystem extends AbstractLoggingSystem {
 
@@ -42,13 +44,17 @@ public abstract class Slf4JLoggingSystem extends AbstractLoggingSystem {
 
 	@Override
 	public void beforeInitialize() {
+		// 父方法
 		super.beforeInitialize();
+		// <1> 配置 JUL 的桥接处理器
 		configureJdkLoggingBridgeHandler();
 	}
 
 	@Override
 	public void cleanUp() {
+		// 判断 JUL 是否桥接到 SLF4J 了
 		if (isBridgeHandlerAvailable()) {
+			// 移除 JUL 桥接处理器
 			removeJdkLoggingBridgeHandler();
 		}
 	}
@@ -58,14 +64,18 @@ public abstract class Slf4JLoggingSystem extends AbstractLoggingSystem {
 			LogFile logFile) {
 		Assert.notNull(location, "Location must not be null");
 		if (initializationContext != null) {
+			// 应用 environment 和 logFile 的属性，到系统属性种。
 			applySystemProperties(initializationContext.getEnvironment(), logFile);
 		}
 	}
 
 	private void configureJdkLoggingBridgeHandler() {
 		try {
+			// <1> 判断 JUL 是否桥接到 SLF4J 了
 			if (isBridgeJulIntoSlf4j()) {
+				// <2> 移除 JUL 桥接处理器
 				removeJdkLoggingBridgeHandler();
+				// <3> 重新安装 SLF4JBridgeHandler
 				SLF4JBridgeHandler.install();
 			}
 		}
@@ -80,7 +90,10 @@ public abstract class Slf4JLoggingSystem extends AbstractLoggingSystem {
 	 * @since 2.0.4
 	 */
 	protected final boolean isBridgeJulIntoSlf4j() {
-		return isBridgeHandlerAvailable() && isJulUsingASingleConsoleHandlerAtMost();
+		// 判断是否存在 SLF4JBridgeHandler 类
+		return isBridgeHandlerAvailable()
+				// 判断是否 JUL 只有 ConsoleHandler 处理器被创建了
+				&& isJulUsingASingleConsoleHandlerAtMost();
 	}
 
 	protected final boolean isBridgeHandlerAvailable() {
@@ -95,7 +108,9 @@ public abstract class Slf4JLoggingSystem extends AbstractLoggingSystem {
 
 	private void removeJdkLoggingBridgeHandler() {
 		try {
+			// 移除 JUL 的 ConsoleHandler
 			removeDefaultRootHandler();
+			// 卸载 SLF4JBridgeHandler
 			SLF4JBridgeHandler.uninstall();
 		}
 		catch (Throwable ex) {

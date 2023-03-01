@@ -29,6 +29,9 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
  * {@link Validated @Validated}.
  *
  * @author Phillip Webb
+ *
+ * @tips @ConfigurationProperties + @Validated 注解的 Bean 的 JSR303 的 Validator 实现类。
+ *
  */
 final class ConfigurationPropertiesJsr303Validator implements Validator {
 
@@ -41,6 +44,7 @@ final class ConfigurationPropertiesJsr303Validator implements Validator {
 		this.delegate = new Delegate(applicationContext);
 	}
 
+	// 判断是否支持指定类的校验。
 	@Override
 	public boolean supports(Class<?> type) {
 		return this.delegate.supports(type);
@@ -51,6 +55,7 @@ final class ConfigurationPropertiesJsr303Validator implements Validator {
 		this.delegate.validate(target, errors);
 	}
 
+	// 校验是否支持 JSR303 。
 	public static boolean isJsr303Present(ApplicationContext applicationContext) {
 		ClassLoader classLoader = applicationContext.getClassLoader();
 		for (String validatorClass : VALIDATOR_CLASSES) {
@@ -64,8 +69,11 @@ final class ConfigurationPropertiesJsr303Validator implements Validator {
 	private static class Delegate extends LocalValidatorFactoryBean {
 
 		Delegate(ApplicationContext applicationContext) {
+			// 设置 applicationContext 属性
 			setApplicationContext(applicationContext);
+			// 设置 messageInterpolator 属性
 			setMessageInterpolator(new MessageInterpolatorFactory().getObject());
+			// 回调 afterPropertiesSet 方法
 			afterPropertiesSet();
 		}
 

@@ -59,6 +59,9 @@ public interface Archive extends Iterable<Archive.Entry> {
 	 * @throws IOException if nested archives cannot be read
 	 *
 	 * @tips 调用 Archive 的 #getNestedArchives(EntryFilter filter) 方法，获得 archive 内嵌的 Archive 集合。
+	 *
+	 * ExplodedArchive 是针对目录的 Archive 实现类。
+	 * JarFileArchive 是针对 jar 包的 Archive 实现类。
 	 */
 	List<Archive> getNestedArchives(EntryFilter filter) throws IOException;
 

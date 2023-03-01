@@ -31,6 +31,11 @@ import org.springframework.web.context.support.ServletContextAwareProcessor;
  *
  * @author Phillip Webb
  * @since 1.0.0
+ *
+ * @tips 主要是处理实现 ServletContextAware 接口的 Bean 。
+ * 初始化这个 Bean 中的 ServletContext 属性，
+ * 这样在实现 ServletContextAware 接口的 Bean 中就可以拿到 ServletContext 对象了，
+ * Spring 中 Aware 接口就是这样实现的。
  */
 public class WebApplicationContextServletContextAwareProcessor extends ServletContextAwareProcessor {
 

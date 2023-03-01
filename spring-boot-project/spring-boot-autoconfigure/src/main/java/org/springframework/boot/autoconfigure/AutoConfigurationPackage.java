@@ -32,12 +32,15 @@ import org.springframework.context.annotation.Import;
  * @author Phillip Webb
  * @since 1.3.0
  * @see AutoConfigurationPackages
+ *
+ * @tips 主要功能自动配置包，它会获取主程序类所在的包路径，并将包路径（包括子包）下的所有组件注册到 Spring IOC 容器中。
+ * 酱紫，后续有其它模块需要使用，就可以通过获得该 Bean ，从而获得所在的包。例如说，JPA 模块，需要使用到。
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Import(AutoConfigurationPackages.Registrar.class)
+@Import(AutoConfigurationPackages.Registrar.class) //可用于资源的导入。情况比较多，
 public @interface AutoConfigurationPackage {
 
 }
